@@ -101,6 +101,12 @@
             }
         }
 
+        sheetPrivate.setFirstRow = function(row){
+            for(let col = 0; col < row.length; col++) {
+                sheetPrivate.cells[0][col].set(row[col]);
+            }
+        }
+
         /*
         * 对给定的表各区域进行 toggle 或 set操作
         * */
@@ -179,6 +185,10 @@
             if(sheetPrivate.settingCallback){
                 sheetPrivate.settingCallback();
             }
+        }
+
+        this.setFirstRow = function(row){
+            sheetPrivate.setFirstRow(row);
         }
 
         /*
@@ -586,6 +596,12 @@
             * */
             clean : function(){
                 sheetModel.set(0,{});
+                repaintSheet();
+                cleanRemark();
+            },
+
+            setFirstRow : function(row){
+                sheetModel.setFirstRow(row);
                 repaintSheet();
                 cleanRemark();
             },
