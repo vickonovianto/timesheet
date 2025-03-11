@@ -261,11 +261,7 @@
          *
          *      sheetClass : "",
          *      start : function(ev){...}
-<<<<<<< HEAD
-         *      end : function(ev, selectedArea){...}
-=======
          *      end : function(ev,selectedArea){...}
->>>>>>> b2f70472ecb97bbf9ecdc7f205ea10c8e5e7b929
          *      remarks : false
          * }
          *
@@ -493,6 +489,8 @@
 
         var isColSelecting = false; /*鼠标在列表头区域做选择*/
 
+        var userHandler = null;
+
         var eventBinding = function(){
 
             /*防止重复绑定*/
@@ -513,10 +511,16 @@
                 // var startCell = [curCell.data("row"),curCell.data("col")];
                 // isSelecting = true;
                 // startSelecting(ev,startCell);
-
-
                 if(!operationArea.startCell){
                     return;
+                }
+                if (ev.button === 2) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                } else if (ev.button === 0) {
+                    if (typeof userHandler === "function") {
+                        userHandler.call(this, ev);
+                    }
                 }
                 var curCell = $(ev.currentTarget);
                 curCell = $(ev.currentTarget);
@@ -543,8 +547,15 @@
 
             /*表格禁止鼠标右键菜单*/
             thisSheet.delegate("td","contextmenu.umsSheetEvent",function(ev){
+                ev.preventDefault();
+                ev.stopImmediatePropagation();
+                if (typeof userHandler === "function") {
+                    userHandler.call(this, ev);
+                }
                 return false;
             });
+
+            
         };
 
 
@@ -640,6 +651,10 @@
                     }
                 }
                 return true;
+            },
+
+            attachHandler: function(handler){
+                userHandler = handler;
             }
         };
 
