@@ -514,6 +514,11 @@
                 if(!operationArea.startCell){
                     return;
                 }
+                var curCell = $(ev.currentTarget);
+                curCell = $(ev.currentTarget);
+                var endCell = [curCell.data("row"),curCell.data("col")];
+                var correctedCells = cellCompare(operationArea.startCell,endCell);
+                afterSelecting(ev,correctedCells);
                 if (ev.button === 2) {
                     ev.preventDefault();
                     ev.stopPropagation();
@@ -522,11 +527,6 @@
                         userHandler.call(this, ev);
                     }
                 }
-                var curCell = $(ev.currentTarget);
-                curCell = $(ev.currentTarget);
-                var endCell = [curCell.data("row"),curCell.data("col")];
-                var correctedCells = cellCompare(operationArea.startCell,endCell);
-                afterSelecting(ev,correctedCells);
             });
 
             /*表格正在选择*/
